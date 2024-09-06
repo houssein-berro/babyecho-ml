@@ -142,6 +142,38 @@ def process_audio(filename):
     
     return result
 
+def normalize(row):
+    min_values = []
+    max_values = []
+    csv1 = os.path.join(CSV_FOLDER, 'min_max_values.csv')
+    
+    if not os.path.exists(csv1):
+        with open(csv1, 'w', newline='') as csvfile:
+            csv_writer = csv.writer(csvfile)
+            csv_writer.writerow(['feature', 'min_value', 'max_value'])
+            for i in range(len(row)):
+                min_val = -100.0
+                max_val = 100.0
+                csv_writer.writerow([f'mfcc_{i+1}', min_val, max_val])
+                min_values.append(min_val)
+                max_values.append(max_val)
+    else:
+        with open(csv1, 'r', newline='') as csvfile:
+            csv_reader = csv.reader(csvfile)
+            next(csv_reader)
+            for line in csv_reader:
+                min_val = float(line[1])
+                max_val = float(line[2])
+                min_values.append(min_val)
+                max_values.append(max_val)
+
+    row1 = []
+    for i in range(len(row)):
+        normalized_val = (row[i] - min_values[i]) / (max_values[i] - min_values[i])
+        row1.append(normalized_val)
+    
+    return row1
+
 
 
 if __name__ == '__main__':
