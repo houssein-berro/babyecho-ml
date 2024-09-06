@@ -86,6 +86,27 @@ def check_silence(file_path, silence_threshold=0.01):
         print(f"Error checking silence in {file_path}: {e}")
         return True  # Treat as silent in case of error
 
+def convert_to_spectrogram(file_path):
+    try:
+        x, sr = librosa.load(file_path, sr=None)
+        spectrogram = librosa.feature.melspectrogram(y=x, sr=sr, n_mels=128)
+        spectrogram = librosa.power_to_db(spectrogram, ref=np.max)
+        spectrogram = np.expand_dims(spectrogram, axis=-1)  # Add channel dimension
+        
+        # Resize the spectrogram to (128, 128, 1)
+        target_shape = (128, 128)
+        if spectrogram.shape[1] < target_shape[1]:
+            # Pad with zeros if the width is less than 128
+            padding = target_shape[1] - spectrogram.shape[1]
+            spectrogram = np.pad(spectrogram, ((0, 0), (0, padding), (0, 0)), mode='constant')
+        elif spectrogram.shape[1] > target_shape[1]:
+            # Crop the spectrogram if the width is more than 128
+            spectrogram = spectrogram[:, :target_shape[1], :]
+        
+        return spectrogram
+    except Exception as e:
+        print(f"Error converting {file_path} to spectrogram: {e}")
+        return None
 
 
 if __name__ == '__main__':
