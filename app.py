@@ -28,6 +28,22 @@ if not os.path.exists(UPLOAD_FOLDER):
 async def read_root():
     return {"message": "Hello, World!"}
 
+@app.post("/upload")
+async def upload_file(file: UploadFile = File(...)):
+    if not file.filename.endswith(('.mp3', '.wav', '.m4a', '.mp4')):
+        raise HTTPException(status_code=400, detail="Invalid file format. Only audio files are allowed.")
+    print(file.filename)
+    if file.filename == '':
+        raise HTTPException(status_code=400, detail="No selected file")
+    
+    file_path = os.path.join(UPLOAD_FOLDER, file.filename)
+    
+    with open(file_path, "wb") as buffer:
+        shutil.copyfileobj(file.file, buffer)
+    
+    prediction = process_audio(file.filename)
+    clear_csv(os.path.join(CSV_FOLDER, 'dataset.csv'))
+    return JSONResponse(content={"prediction": prediction[0]}, status_code=200)
 
 
 if __name__ == '__main__':
