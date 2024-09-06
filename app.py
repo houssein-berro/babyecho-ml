@@ -184,6 +184,19 @@ def predict(spectrogram):
     predicted_labels = np.argmax(predictions, axis=1) + 1
     return decode(predicted_labels)
 
+def clear_csv(file_path):
+    try:
+        with open(file_path, 'r') as file:
+            reader = csv.reader(file)
+            header = next(reader)
+        with open(file_path, 'w', newline='') as file:
+            writer = csv.writer(file)
+            writer.writerow(header)
+        print(f"Cleared all rows in {file_path}.")
+    except Exception as e:
+        print(f"Error clearing rows in {file_path}: {e}")
+        raise
+
 
 
 if __name__ == '__main__':
