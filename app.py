@@ -18,6 +18,11 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+UPLOAD_FOLDER = 'upload'
+CSV_FOLDER = 'features/csv'
+
+if not os.path.exists(UPLOAD_FOLDER):
+    os.makedirs(UPLOAD_FOLDER)
 
 if __name__ == '__main__':
     import uvicorn
