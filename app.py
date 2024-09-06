@@ -70,6 +70,22 @@ def convert_to_wav(file_path):
         print(f"Error converting file {file_path} to WAV: {e}")
         return None
 
+# Method to check if audio contains silence
+def check_silence(file_path, silence_threshold=0.01):
+    try:
+        y, sr = librosa.load(file_path, sr=None)
+        rms = librosa.feature.rms(y=y)  # Calculate Root Mean Square (RMS) energy
+        avg_rms = np.mean(rms)
+        print(f"RMS energy for {file_path}: {avg_rms}")
+
+        if avg_rms < silence_threshold:
+            return True  # Audio is silent
+        else:
+            return False  # Audio has sound
+    except Exception as e:
+        print(f"Error checking silence in {file_path}: {e}")
+        return True  # Treat as silent in case of error
+
 
 
 if __name__ == '__main__':
