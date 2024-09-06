@@ -195,9 +195,16 @@ def clear_csv(file_path):
         print(f"Cleared all rows in {file_path}.")
     except Exception as e:
         print(f"Error clearing rows in {file_path}: {e}")
-        raise 
+        raise
 
-
+def clear_csv_except_header(file_path):
+    try:
+        df = pd.read_csv(file_path)
+        df.iloc[0:1].to_csv(file_path, index=False)
+        print(f"Cleared all rows in {file_path} except for the header.")
+    except Exception as e:
+        print(f"Error clearing rows in {file_path}: {e}")
+        raise
 
 if __name__ == '__main__':
     import uvicorn
