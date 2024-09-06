@@ -108,6 +108,41 @@ def convert_to_spectrogram(file_path):
         print(f"Error converting {file_path} to spectrogram: {e}")
         return None
 
+def process_audio(filename):
+    file_path = os.path.join('upload', filename)
+    wav_path = convert_to_wav(file_path)
+    
+    if wav_path is None:
+        return ["Error: Could not convert to WAV"]
+    
+    # Check if the audio is silent
+    if check_silence(wav_path):
+        return ["Error: The audio is silent"]
+
+    spectrogram = convert_to_spectrogram(wav_path)
+    
+    if spectrogram is None:
+        return ["Error: Could not convert to spectrogram"]
+    
+    # Check if the spectrogram matches the expected shape
+    if spectrogram.shape != (128, 128, 1):
+        return [f"Error: Spectrogram shape {spectrogram.shape} is not valid"]
+
+    # Ensure input shape is (1, 128, 128, 1) for batch processing
+    spectrogram = np.expand_dims(spectrogram, axis=0)
+    
+    result = predict(spectrogram)
+
+    # Delete the .wav file after processing
+    try:
+        os.remove(wav_path)
+        print(f"Deleted file: {wav_path}")
+    except Exception as e:
+        print(f"Error deleting file {wav_path}: {e}")
+    
+    return result
+
+
 
 if __name__ == '__main__':
     import uvicorn
