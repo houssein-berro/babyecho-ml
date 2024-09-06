@@ -205,7 +205,7 @@ def clear_csv_except_header(file_path):
     except Exception as e:
         print(f"Error clearing rows in {file_path}: {e}")
         raise
-
-if __name__ == '__main__':
-    import uvicorn
-    uvicorn.run(app, host="192.168.0.101", port=50314, debug=True)
+ 
+if __name__ == '__main__': 
+    import uvicorn 
+    uvicorn.run(app, host="192.168.0.101", port=50314, debug=True) 
