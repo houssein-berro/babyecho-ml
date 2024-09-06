@@ -195,7 +195,7 @@ def clear_csv(file_path):
         print(f"Cleared all rows in {file_path}.")
     except Exception as e:
         print(f"Error clearing rows in {file_path}: {e}")
-        raise
+        raise 
 
 
 
