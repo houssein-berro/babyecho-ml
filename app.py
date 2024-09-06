@@ -10,3 +10,7 @@ import csv
 from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI()
+
+if __name__ == '__main__':
+    import uvicorn
+    uvicorn.run(app, host="192.168.0.101", port=50314, debug=True)
