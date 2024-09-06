@@ -45,6 +45,12 @@ async def upload_file(file: UploadFile = File(...)):
     clear_csv(os.path.join(CSV_FOLDER, 'dataset.csv'))
     return JSONResponse(content={"prediction": prediction[0]}, status_code=200)
 
+def add_uploaded_to_dataset(filename):
+    with open(os.path.join(CSV_FOLDER, 'dataset.csv'), 'a', newline='') as csvfile:
+        csv_writer = csv.writer(csvfile)
+        csv_writer.writerow([filename])
+    shutil.copy(os.path.join(UPLOAD_FOLDER, filename), os.path.join(CSV_FOLDER, filename))
+
 
 if __name__ == '__main__':
     import uvicorn
