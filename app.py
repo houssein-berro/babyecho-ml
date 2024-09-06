@@ -51,6 +51,26 @@ def add_uploaded_to_dataset(filename):
         csv_writer.writerow([filename])
     shutil.copy(os.path.join(UPLOAD_FOLDER, filename), os.path.join(CSV_FOLDER, filename))
 
+def convert_to_wav(file_path):
+    try:
+        print(f"Attempting to convert file at: {file_path}")
+        
+        # Check if the file exists
+        if not os.path.exists(file_path):
+            print(f"File not found: {file_path}")
+            return None
+        
+        audio = AudioSegment.from_file(file_path)
+        wav_path = file_path.replace(file_path.split('.')[-1], 'wav')
+        audio.export(wav_path, format="wav")
+        
+        print(f"File converted to: {wav_path}")
+        return wav_path
+    except Exception as e:
+        print(f"Error converting file {file_path} to WAV: {e}")
+        return None
+
+
 
 if __name__ == '__main__':
     import uvicorn
