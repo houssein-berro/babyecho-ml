@@ -177,7 +177,15 @@ def normalize(row):
 def decode(labels):
     label_map = {1: 'belly_pain', 2: 'burping', 3: 'discomfort', 4: 'hungry', 5: 'tired'}
     return [label_map.get(label, 'unknown') for label in labels]
- 
+
+def predict(spectrogram):
+    loaded_model = tf.keras.models.load_model('features/modelV3.keras')
+    predictions = loaded_model.predict(spectrogram)
+    predicted_labels = np.argmax(predictions, axis=1) + 1
+    return decode(predicted_labels)
+
+
+
 if __name__ == '__main__':
     import uvicorn
     uvicorn.run(app, host="192.168.0.101", port=50314, debug=True)
