@@ -9,4 +9,4 @@ from pydub import AudioSegment
 import csv
 from fastapi.middleware.cors import CORSMiddleware
 
-
+app = FastAPI()
