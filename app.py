@@ -24,6 +24,12 @@ CSV_FOLDER = 'features/csv'
 if not os.path.exists(UPLOAD_FOLDER):
     os.makedirs(UPLOAD_FOLDER)
 
+@app.get("/")
+async def read_root():
+    return {"message": "Hello, World!"}
+
+
+
 if __name__ == '__main__':
     import uvicorn
     uvicorn.run(app, host="192.168.0.101", port=50314, debug=True)
